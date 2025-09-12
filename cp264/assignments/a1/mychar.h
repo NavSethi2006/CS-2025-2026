@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a1q1
+File:    mychar.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #ifndef MYCHAR_H
 #define MYCHAR_H
 

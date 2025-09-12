@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a1q1
+File:    mymortgage.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #ifndef MYMORTGAGE_H
 #define MYMORTGAGE_H
 

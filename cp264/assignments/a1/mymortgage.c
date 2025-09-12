@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a1q1
+File:    mymortgage.c
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #include "mymortgage.h"
 
 float monthly_payment(float principal_amount, float annual_interest_rate, int years) {

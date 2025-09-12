@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a1q1
+File:    powersum.c
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #include "powersum.h"
 
 int power_overflow(int b, int n) {

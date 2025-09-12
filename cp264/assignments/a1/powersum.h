@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a1q1
+File:    powersum.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #ifndef POWERSUM_H
 #define POWERSUM_H
 
