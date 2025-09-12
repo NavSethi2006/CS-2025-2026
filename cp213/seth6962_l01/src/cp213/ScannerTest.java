@@ -42,10 +42,8 @@ public class ScannerTest {
 	
 	while(source.hasNext()) {
 		source.next();
-		tokens++;
-		
+		tokens++;	
 	}
-	
 
 	return tokens;
     }

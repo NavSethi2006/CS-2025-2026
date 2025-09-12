@@ -5,7 +5,7 @@ int mytype(char c) {
 
     int return_t;
     //  0 to 9 in ASCII
-    if (c >= 48 && c <= 57) {
+    if (c >= '0' && c <= '9') {
         return_t = 0;
     }
     // arithmetic operators in ASCII
@@ -13,15 +13,15 @@ int mytype(char c) {
         return_t = 1;
     }
     // LEFT PARENTHESIS ( in ASCII
-    else if(c == 40) {
+    else if(c == '(') {
         return_t = 2;
     }
     // RIGHT PARENTHESIS ) in ASCII
-    else if(c == 41) {
+    else if(c == ')') {
         return_t = 3;
     }
     // English alphabet in ASCII both upper and lower case
-    else if((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
+    else if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
         return_t = 4;
     }
     else {
@@ -33,7 +33,7 @@ int mytype(char c) {
 
 char case_flip(char c) {
 // 31 is the difference in between upper and lowercase
-    if(c <= 90) {
+    if(c <= 'a') {
         c += 31;
     } else{
         c -= 31;
