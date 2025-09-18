@@ -47,8 +47,6 @@ char case_flip(char c) {
     } else{
         c -= 31;
     }
-
-
     return c;
 }
 
