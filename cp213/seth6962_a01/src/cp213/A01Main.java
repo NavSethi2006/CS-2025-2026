@@ -1,5 +1,7 @@
 package cp213;
 
+import java.util.Scanner;
+
 /**
  * Sample tests for the Assignment 1 methods. Not comprehensive - add your own
  * testing.
@@ -26,6 +28,8 @@ public class A01Main {
 	System.out.println("  Test Operation\n  {expected value}: actual value");
 	System.out.println();
 
+	System.out.printf("\n The number is %07d", 1212);
+	
 	testIsLeapYear();
 	testIsPalindrome();
 	testIsValid();
