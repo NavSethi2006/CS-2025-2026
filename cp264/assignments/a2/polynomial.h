@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a2q2
+File:    polynomial.h
+Author:  Navin Sethi
+Version: 2025-09-21
+--------------------------------------------------
+*/
+
 #ifndef POLYNOMIAL_H
 #define POLYNOMIAL_H
  

@@ -1,5 +1,12 @@
+/*
+--------------------------------------------------
+Project: a2q3
+File:    matrix.h
+Author:  Navin Sethi
+Version: 2025-09-21
+--------------------------------------------------
+*/
 
- 
 #ifndef MATRIX_H
 #define MATRIX_H
 
