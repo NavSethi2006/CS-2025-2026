@@ -20,8 +20,25 @@ public class Strings {
     public static boolean isPalindrome(final String string) {
 
 	// your code here
+    	 if (string == null) {
+    	        return false;
+    	    }
 
-	return false;
+    	    // Normalize: keep only letters, lowercase them
+    	    String normalized = string.replaceAll("[^A-Za-z]", "").toLowerCase();
+
+    	    int left = 0;
+    	    int right = normalized.length() - 1;
+
+    	    while (left < right) {
+    	        if (normalized.charAt(left) != normalized.charAt(right)) {
+    	            return false;
+    	        }
+    	        left++;
+    	        right--;
+    	    }
+
+    	    return true;
     }
 
     /**
@@ -36,9 +53,27 @@ public class Strings {
      */
     public static boolean isValid(final String name) {
 
-	// your code here
+    	if (name == null || name.isEmpty()) {
+            return false;
+        }
 
-	return false;
+        char first = name.charAt(0);
+        if (!(Character.isLetter(first) || first == '_')) {
+            return false;
+        }
+
+        if (name.equals("_")) {
+            return false;
+        }
+
+        for (int i = 1; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (!(Character.isLetterOrDigit(c) || c == '_')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -59,8 +94,26 @@ public class Strings {
     public static String pigLatin(String word) {
 
 	// your code here
+    	boolean vowels = false;
+    	String piglatinword = null;
+    		
+    	for (int i = 0; i < VOWELS.length(); i++) {
+    		if(word.charAt(0) == VOWELS.charAt(i)) {
+    			vowels = true;
+    		}
+    	
+    		
+    		if(vowels) {
+    			piglatinword = word + "way";
+    		} else {
+    			String firstchar = String.valueOf(word.charAt(0));
+    			String secondchar = String.valueOf(word.charAt(1));
+    			String new_word = word.replaceFirst(firstchar, "").replaceFirst(secondchar, "");
+    			piglatinword = secondchar.toUpperCase() + new_word + firstchar.toLowerCase() + "ay";
+    		}
+    }
 
-	return null;
+	return piglatinword;
     }
 
 }

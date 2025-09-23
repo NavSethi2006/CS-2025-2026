@@ -22,9 +22,23 @@ public class Cipher {
     public static String shift(final String string, final int n) {
 
 	// your code here
+    	char[] alpha = ALPHA.toCharArray();
+    	char[] ans = string.toCharArray();
+    	int shiftnum;
+    	String shift = "";
+    	    	
+     	
+    	for(int i = 0; i < string.length(); i++) {
+    		for (int j = 0; j < alpha.length; j++) {
+    			if(alpha[j] == ans[i]) {
+    				shiftnum = j+n;
+    				if(shiftnum > ALPHA_LENGTH) shiftnum -= ALPHA_LENGTH;
+    				shift = shift + alpha[shiftnum];
+    			}
+    		}
+    	}
     	
-
-	return null;
+	return shift;
     }
 
     /**
@@ -47,8 +61,22 @@ public class Cipher {
     public static String substitute(final String string, final String ciphertext) {
 
 	// your code here
-
-	return null;
+    	char[] alpha = ALPHA.toCharArray();
+    	char[] ans = string.toCharArray();
+    	char[] ciphertex = ciphertext.toCharArray();
+    	String shift = "";
+    	    	
+     	
+    	for(int i = 0; i < string.length(); i++) {
+    		for(int j = 0; j < ALPHA_LENGTH; j++) {
+    			if(alpha[j] == ans[i]) {
+    				shift = shift + ciphertex[j];
+    			}
+    			
+    		}
+    	}
+    	
+	return shift;
     }
 
 }

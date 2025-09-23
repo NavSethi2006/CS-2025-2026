@@ -46,10 +46,16 @@ public class Numbers {
     public static boolean isPrime(final int n) {
 
 	// your code here
-    boolean rtstmt = false;
-    	if(n % 2 != 0) {
-    		rtstmt = true;
+    boolean rtstmt = true;
+    	if(n % 2 == 0) {
+    		rtstmt = false;
     	}
+    	
+    	for (int i = 3; i * i <= n; i += 2) {
+            if (n % i == 0) {
+                return false; // Found a divisor, not prime
+            }
+        }
 
 	return rtstmt;
     }

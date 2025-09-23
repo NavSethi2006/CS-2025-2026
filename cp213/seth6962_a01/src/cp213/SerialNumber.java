@@ -18,8 +18,21 @@ public class SerialNumber {
     public static boolean allDigits(final String string) {
 
 	// your code here
-
-	return false;
+    	int digitcount = 0;
+    	
+    	for (char c : string.toCharArray()) {
+    		if(Character.isDigit(c)) {
+    			digitcount += 1;
+    		}
+    	}
+    	
+    	boolean returnstmt = true;
+    	
+    	if(digitcount < string.length()) {
+    		returnstmt = false;
+    	}
+    	
+	return returnstmt;
     }
 
     /**
@@ -33,8 +46,25 @@ public class SerialNumber {
     public static boolean validSn(final String sn) {
 
 	// your code here
+    	boolean valied = true;
+    	
+    	char[] serialnum = sn.toCharArray();
+    	
+    	if(serialnum[0] != 'S' && serialnum[1] != 'N') {
+    		valied = false;
+    	} else if (serialnum[2] != '/') {
+    		valied = false;
+    	} 	
+    	for (int i = 3; i <= 6; i++) {
+        	if (!Character.isDigit(serialnum[i])) valied = false;
+        	
+    	} 	
+    	if(serialnum[7] != '-')valied = false;	
+    	for (int i = 8; i < serialnum.length; i++) {
+    		if(!Character.isDigit(serialnum[i])) valied = false;
 
-	return false;
+    	}
+	return valied;
     }
 
     /**
@@ -49,6 +79,8 @@ public class SerialNumber {
     public static void validSnFile(final Scanner fileIn, final PrintStream goodSns, final PrintStream badSns) {
 
 	// your code here
+    	
+    	
 
 	return;
     }
