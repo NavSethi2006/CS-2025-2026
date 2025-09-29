@@ -1,7 +1,11 @@
 /*
- * your program signature
- */ 
- 
+--------------------------------------------------
+Project: a3q1
+File:    mystring.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
  #include "mystring.h"
 
 

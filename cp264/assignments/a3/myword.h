@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a3q2
+File:    myword.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #ifndef MYWORD_H
 #define MYWORD_H
 

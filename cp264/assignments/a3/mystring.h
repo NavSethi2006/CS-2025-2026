@@ -1,3 +1,11 @@
+/*
+--------------------------------------------------
+Project: a3q1
+File:    mystring.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
 
 #ifndef MYSTRING_H
 #define MYSTRING_H

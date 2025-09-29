@@ -1,3 +1,11 @@
+/*
+--------------------------------------------------
+Project: a3q2
+File:    myword.c
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
 
 #include <stdio.h>
 #include <string.h>
