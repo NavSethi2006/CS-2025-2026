@@ -29,17 +29,19 @@ void select_sort(void *a[], int left, int right)
 {
 // your code
 
-     for (int i = 0; i < right; ++i) {
-          int k = i;
-          for(int j = i+1; j < right ; ++j) {
-               if (cmp(a[j], a[k]) <0) {
-                    k = j;
+     for (int i = left; i < right; i++) {
+          int min = i;
+          for(int j = i+1; j <= right ; ++j) {
+               if (cmp(a[j], a[min]) <0) {
+                    min = j;
                }
           }
-          if (i != k) { // the following swap a[i] and a[k]
-               swap(&a[i], &a[k]);
+          if (i != min) { // the following swap a[i] and a[k]
+               swap(&a[i], &a[min]);
           }
      }
+
+
 }
 
 void quick_sort(void *a[], int left, int right)
@@ -64,6 +66,10 @@ void quick_sort(void *a[], int left, int right)
 
 void my_sort(void *a[], int left, int right, int (*cmp)(void*, void*) )
 { 
+
+     
+     select_sort(a, left, right);
+
 
 
 }
