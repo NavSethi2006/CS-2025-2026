@@ -9,14 +9,12 @@ Version: 2025-09-12
 
 #include "mysort.h"
 
-// swap pointers
 void swap(void **x, void **y) {
      void *temp = *y;
      *y = *x;
      *x = temp;
 }
 
-// a compare floating values pointed by void pointers. 
 int cmp(void *x, void *y) {
    float a = *(float*)x;
    float b = *(float*)y; 
@@ -28,7 +26,6 @@ int cmp(void *x, void *y) {
 void select_sort(void *a[], int left, int right)
 {
 // your code
-
      for (int i = left; i < right; i++) {
           int min = i;
           for(int j = i+1; j <= right ; ++j) {
@@ -36,12 +33,8 @@ void select_sort(void *a[], int left, int right)
                     min = j;
                }
           }
-          if (i != min) { // the following swap a[i] and a[k]
-               swap(&a[i], &a[min]);
-          }
+          if (i != min) swap(&a[i], &a[min]);
      }
-
-
 }
 
 void quick_sort(void *a[], int left, int right)
@@ -67,9 +60,24 @@ void quick_sort(void *a[], int left, int right)
 void my_sort(void *a[], int left, int right, int (*cmp)(void*, void*) )
 { 
 
-     
-     select_sort(a, left, right);
+     if(left >= right) return;
 
+     void *pivot = a[(left + right) / 2];
+     int i = left, j = right;
 
+     while(i <= j) {
+          while(cmp(a[i], pivot) < 0) i++;
+          while(cmp(a[j], pivot) > 0) j--;
+          if(i <= j) {
+               void *tmp = a[i];
+               a[i] = a[j];
+               a[j] = tmp;
+               i++;
+               j--;
+          }
+     }
+
+     if(left < j) my_sort(a,left,j,cmp);
+     if(i < right) my_sort(a,i,right,cmp);
 
 }

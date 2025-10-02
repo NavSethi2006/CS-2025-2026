@@ -15,20 +15,44 @@ Version: 2025-09-12
 #include "mysort.h"
 
 GRADE grade(float score){
-   GRADE r = {"F"}; 
+   GRADE r = {"F"};
    // your code
+   char g[14][5] = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"};
+   int b[] = {100, 90, 85, 80, 77, 73, 70, 67, 63, 60, 57, 53, 50, 0};
+   int left=0, right = sizeof(b)/sizeof(float)-1;
+   int ans;
+
+   while (left <= right) {
+      int mid = (left+right)/2;
+
+      if(score >= b[mid]) {
+         ans = mid;
+         right = mid - 1;
+      } else {
+         left = mid + 1;
+      }
+   }
+
+   strcpy(r.letter_grade, g[ans-1]);
    return r;   
 }
 
 int import_data(FILE *fp, RECORD *dataset) {
 // your code
+
+   return 0;
 }
 
 STATS process_data(RECORD *dataset, int count) {    
 // your code
+   STATS stats = {0,0,0,0};
+
+   return stats;
 }
 
 
 int report_data(FILE *fp, RECORD *dataset, STATS stats) {
 // your code
+
+   return 0;
 }

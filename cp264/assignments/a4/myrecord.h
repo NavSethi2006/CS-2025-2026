@@ -17,7 +17,7 @@ Version: 2025-09-12
 typedef struct {
     char name[20];
     float score;
-  } RECORD;
+} RECORD;
 
 /*
  * Define a structure named STATS containing fields: int count, float mean, 
@@ -28,14 +28,14 @@ typedef struct {
     float mean;
     float stddev;
     float median;
-  } STATS;
+} STATS;
 
 /*
  * Define a structure named GRADE to hold a string letter_grade at most 2 letters. 
 */
 typedef struct {
     char letter_grade[3];
-  } GRADE;
+} GRADE;
 
 /*
  * Convert a percentage grade to letter grade defined by percentage ranges
@@ -81,4 +81,4 @@ STATS process_data(RECORD *dataset, int count);
  */
 int report_data(FILE *fp,  RECORD *dataset, STATS stats);
 
-#endif;
+#endif
