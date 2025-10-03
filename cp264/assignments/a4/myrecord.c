@@ -40,14 +40,50 @@ GRADE grade(float score){
 int import_data(FILE *fp, RECORD *dataset) {
 // your code
 
-   return 0;
+   char delimiters[] = " ,\n\r";
+   char line[100];
+   int i = 0; // record counter
+   char *token = NULL;
+
+   while(fgets(line, sizeof(line), fp) != NULL) {
+      token = (char *) strtok(line, delimiters);
+      strcpy(dataset[i].name, token);
+      token = (char *) strtok(NULL, delimiters);
+      sscanf(token, "%f", &dataset[i].score);
+      i++;
+   }
+
+   return i;
 }
 
 STATS process_data(RECORD *dataset, int count) {    
 // your code
-   STATS stats = {0,0,0,0};
+   STATS stats;
+   float avg;
+   float stan_deviation;
+   float median;
 
-   return stats;
+   for (int i = 0; i < count; i++) {
+      avg += dataset[i].score;
+
+   }
+
+   avg /= count;
+
+   for (int i = 0; i < count; i++) {
+      stan_deviation += (dataset[i].score-avg)*(dataset[i].score-avg);
+   }
+   stan_deviation = sqrt(stan_deviation/count);
+
+   stats.mean = avg;
+   stats.stddev = stan_deviation;
+   stats.count = count;
+   
+   select_sort((void*)dataset,0, count);
+
+   stats.median = dataset[count/2].score;
+
+
 }
 
 
