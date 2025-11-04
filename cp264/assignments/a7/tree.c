@@ -5,54 +5,131 @@
 
 TPROPS tree_property(TNODE *root) {
 // your code
-    int height = 0;
-    int nodes = 0;
-    QUEUE *q;
-    TPROPS r = {0};
-    
-    if (root ) {
-        TNODE *lp = root->left;
-        TNODE *rp = root->right;
-        enqueue(q, root);
-        
+    TPROPS prop = {0, 0};  // initialize (order=0, height=0)
 
-        while (q != NULL) {
-            height++;
+    if (root == NULL)
+        return prop;       // base case: empty tree
 
-            if(lp != NULL) {
-                nodes++;
-            }
-            if(rp != NULL) {
-                nodes++;
-            }
+    // recursive calls for left and right subtrees
+    TPROPS left = tree_property(root->left);
+    TPROPS right = tree_property(root->right);
 
-        }
-    }
-    return r;
+    // compute order (total number of nodes)
+    prop.order = 1 + left.order + right.order;
+
+    // compute height (1 + max(left.height, right.height))
+    prop.height = 1 + (left.height > right.height ? left.height : right.height);
+
+    return prop;
 }
 
 void preorder(TNODE *root) {
 // your code
+    if(root == NULL) {
+        return;
+    }
+    printf("%c ", root->data);
+    preorder(root->left);
+    preorder(root->right);
 }
 
 void inorder(TNODE *root) {
 // your code
+
+    if(root == NULL) {
+        return;
+    }
+    inorder(root->left);
+    printf("%c ", root->data);
+    inorder(root->right);
 }
 
 void postorder(TNODE *root) {
 // your code
+if(root == NULL) {
+    return;
+}
+    postorder(root->left);
+    postorder(root->right);
+    printf("%c ", root->data);
+
+}
+
+
+void aux_bforder(TNODE *root) {
+
 }
 
 void bforder(TNODE *root) {
 // your code
+    if (root == NULL)
+    return;
+
+    QUEUE queue = {0};  // initialize empty queue
+    enqueue(&queue, root);
+
+    while (queue.front) {
+    TNODE *node = (TNODE *)dequeue(&queue);
+    printf("%c ", node->data);
+
+    if (node->left)
+        enqueue(&queue, node->left);
+    if (node->right)
+        enqueue(&queue, node->right);
+    }
 }
 
 TNODE *bfs(TNODE *root, char val) {
 // your code
+
+    if (root == NULL)
+        return NULL;
+
+    QUEUE queue = {0};
+    enqueue(&queue, root);
+
+    while (queue.front) {
+    TNODE *node = (TNODE *)dequeue(&queue);
+
+    if (node->data == val) {
+        clean_queue(&queue);
+        return node;  // found!
+    }
+
+    if (node->left)
+        enqueue(&queue, node->left);
+    if (node->right)
+        enqueue(&queue, node->right);
+    }
+
+    return NULL; // not found
 }
 
 TNODE *dfs(TNODE *root, char val) {
 // your code
+
+    if (root == NULL)
+        return NULL;
+
+    STACK stack = {0};
+    push(&stack, root);
+
+    while (stack.top) {
+    TNODE *node = (TNODE *)pop(&stack);
+
+    if (node->data == val) {
+        clean_stack(&stack);
+        return node;  // found!
+    }
+
+    if (node->left)
+        push(&stack, node->left);
+    if (node->right)
+        push(&stack, node->right);
+    }
+
+    return NULL; // not found
+
 
 }
 
