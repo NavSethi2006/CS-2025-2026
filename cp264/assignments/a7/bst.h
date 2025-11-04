@@ -1,3 +1,11 @@
+/*
+--------------------------------------------------
+Project: a7q2
+File:    bst.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
 typedef struct record {
   char name[20];
   float score;

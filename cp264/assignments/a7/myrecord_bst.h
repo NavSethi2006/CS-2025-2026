@@ -1,4 +1,12 @@
- 
+/*
+--------------------------------------------------
+Project: a7q3
+File:    myrecord_bst.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/ 
+
 #ifndef MYRECORD_BST_H
 #define MYRECORD_BST_H
 
@@ -17,20 +25,20 @@ typedef struct {
 
 /* Add a record data into the BSTDS and update its statistic fields 
  * using incremental/online algorithm.
- * @parame ds - pointer to the BSTDS.
- * @parama record - RECORD data to be added.
+ * @param ds - pointer to the BSTDS.
+ * @param record - RECORD data to be added.
  */
 void add_record(BSTDS *ds, RECORD record);
 
 /* Delete a node from BSTDA with data.name matching with the given name
  * and stats fields using incremental/online algorithm.
- * @parame ds - pointer to the BSTDS.
- * @parama name - node data.name to be removed.
+ * @param ds - pointer to the BSTDS.
+ * @param name - node data.name to be removed.
  */
 void remove_record(BSTDS *ds, char *name);
 
 /* Clean the BSTDS and reset count, mean, stddev
- * @parame ds - pointer to the BSTDS.
+ * @param ds - pointer to the BSTDS.
  */
 void bstds_clean(BSTDS *ds);
 

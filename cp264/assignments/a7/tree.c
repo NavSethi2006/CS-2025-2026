@@ -1,3 +1,11 @@
+/*
+--------------------------------------------------
+Project: a7q1
+File:    tree.c
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "queue_stack.h"

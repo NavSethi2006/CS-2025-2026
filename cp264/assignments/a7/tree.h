@@ -1,3 +1,12 @@
+/*
+--------------------------------------------------
+Project: a7q1
+File:    tree.h
+Author:  Navin Sethi
+Version: 2025-09-12
+--------------------------------------------------
+*/
+
 #ifndef BST_H
 #define BST_H
 /* Define node structure of a binary tree
