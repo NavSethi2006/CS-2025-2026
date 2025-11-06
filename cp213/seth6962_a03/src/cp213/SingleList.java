@@ -27,8 +27,6 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     	 if(curr.getDatum().equals(key)) {
     		 return curr;
     	 }
-    	 
-    	 
     	 curr = curr.getNext();
      }
 
@@ -64,8 +62,6 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
      */
     public void clean() {
 
-	// your code here
-    	
 
 	return;
     }
@@ -151,17 +147,12 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 	// your code here
     	SingleNode curr = front;
     	
-    	while (curr != null) {
-    		
+    	while (curr != null) {  		
     		if(curr.getDatum().equals(key)) {
     			return curr.getDatum(T);
-    		}
-    		
+    		}		
     		curr = curr.getNext();
     	}
-
-    	
-
 	return null;
     }
 
