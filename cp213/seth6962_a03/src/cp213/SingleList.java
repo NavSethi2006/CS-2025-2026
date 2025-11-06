@@ -1,5 +1,8 @@
 package cp213;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * A single linked list structure of {@code T} objects. Extends the
  * {@code SingleLink} class.
@@ -51,6 +54,8 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     		rear = new_node;
     	}
     	
+    	length++;
+    	
 
 	return;
     }
@@ -61,8 +66,20 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
      * object is preserved.
      */
     public void clean() {
-
-
+        
+        Set<T> seen = new HashSet<>();
+        SingleNode<T> prev = null;
+        SingleNode<T> curr = front;
+        
+        while (curr != null) {
+        	if(seen.contains(curr.getDatum())) {
+        		prev.setNext(curr.getNext());
+        	} else {
+        		seen.add(curr.getDatum());
+        		prev = curr;
+        	}
+        	curr = curr.getNext();
+        }
 	return;
     }
 
@@ -83,6 +100,7 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 	// your code here
     	this.append(left);
     	this.append(right);
+    	length = left.length + right.length;
     	
 	return;
     }
@@ -145,11 +163,11 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T find(final T key) {
 
 	// your code here
-    	SingleNode curr = front;
+    	SingleNode<T> curr = front;
     	
     	while (curr != null) {  		
     		if(curr.getDatum().equals(key)) {
-    			return curr.getDatum(T);
+    			return curr.getDatum();
     		}		
     		curr = curr.getNext();
     	}
@@ -166,8 +184,13 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T get(final int n) {
 
 	// your code here
-
-	return null;
+    	SingleNode<T> curr = front;
+    	
+    	for(int i = 0; i <= n; i++) {
+    		curr = curr.getNext();
+    	}
+    		
+	return curr.getDatum();
     }
 
     /**
@@ -180,8 +203,14 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public boolean equals(final SingleList<T> source) {
 
 	// your code here
-
-	return false;
+    	SingleNode<T> curr = source.front;
+    	SingleNode<T> curr2 = front;
+    	
+    	if(!curr.getDatum().equals(curr2.getDatum())) {
+    		return false;
+    	}
+    	
+	return true;
     }
 
     /**
@@ -193,8 +222,20 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public int index(final T key) {
 
 	// your code here
+    	int count = -1;
+    	
+    	SingleNode<T> curr = front;
+    	while(curr != null) {
+    		if(curr.getDatum().equals(key)) {
+        		break;
+        	}
+    		count++;
+        	curr = curr.getNext();
+    	}    	
+    	if(count >= length-1)
+    		count = -1;
 
-	return 0;
+	return count;
     }
 
     /**
@@ -207,8 +248,15 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void insert(int i, final T datum) {
 
 	// your code here
-    	
-    	
+    	SingleNode<T> curr = front;
+    	SingleNode<T> prev = front;
+    	for(int j = 0; j <= i; j++) {
+    		prev = curr;
+    		curr = curr.getNext();
+    	}
+    	SingleNode<T> new_node = new SingleNode<T>(datum, curr);
+    	prev.setNext(new_node);
+    	length++;
 
 	return;
     }
@@ -228,7 +276,30 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void intersection(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
-
+    	
+		SingleNode<T> curr = left.front;
+		SingleNode<T> curr2 = right.front;
+    	
+    	if(left.length >= right.length) {
+    		while(curr != null) {
+    			this.append(curr.getDatum());
+    			curr = curr.getNext();
+    			length++;
+    			this.append(curr2.getDatum());
+    			curr2 = curr2.getNext();
+    			length++;
+    		}
+    	}
+    	else {
+    		while(curr2 != null) {
+    			this.append(curr.getDatum());
+    			curr = curr.getNext();
+    			length++;
+    			this.append(curr2.getDatum());
+    			curr2 = curr2.getNext();
+    			length++;
+    		}
+    	}	
 	return;
     }
 
@@ -239,9 +310,20 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
      */
     public T max() {
 
-	// your code here
-
-	return null;
+    	 if (front == null) {
+    	        return null; // empty list
+    	    }
+    	    SingleNode<T> curr = front;
+    	    T max = curr.getDatum();
+    	    // traverse the list
+    	    while (curr != null) {
+    	        T value = curr.getDatum();
+    	        if (((Comparable<T>) value).compareTo(max) > 0) {
+    	            max = value;
+    	        }
+    	        curr = curr.getNext();
+    	    }
+    return max;
     }
 
     /**
@@ -252,8 +334,22 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T min() {
 
 	// your code here
+        if (front == null) {
+            return null; // empty list
+        }
 
-	return null;
+        SingleNode<T> curr = front;
+        T min = curr.getDatum();
+
+        while (curr != null) {
+            T value = curr.getDatum();
+            if (value.compareTo(min) < 0) {
+                min = value;
+            }
+            curr = curr.getNext();
+        }
+
+        return min;
     }
 
     /**
@@ -264,6 +360,17 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void prepend(final T datum) {
 
 	// your code here
+    	SingleNode<T> new_node = new SingleNode<T>(datum, null);
+    	
+    	if(front == null) {
+    		front = new_node;
+    		rear = new_node;
+    	} else {
+        	new_node.setNext(front);
+        	front = new_node;
+    	}
+    	
+    	length++;
 
 	return;
     }
@@ -278,8 +385,22 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T remove(final T key) {
 
 	// your code here
-
-	return null;
+    	SingleNode<T> curr = front;
+    	SingleNode<T> prev = front;
+    	
+    	while (curr != null) {
+    		
+    		if(curr.getDatum().equals(key)) {
+    			break;
+    		}
+    		prev = curr;
+    		curr = curr.getNext();
+    	}
+    	T ret = curr.getDatum();
+    	
+    	prev.setNext(curr.getNext());
+    	
+	return ret;
     }
 
     /**
@@ -290,8 +411,10 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T removeFront() {
 
 	// your code here
+    	T ret = front.getDatum();
+    	front = front.getNext();
 
-	return null;
+	return ret;
     }
 
     /**
