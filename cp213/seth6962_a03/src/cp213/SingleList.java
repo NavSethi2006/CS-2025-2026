@@ -1,5 +1,7 @@
 package cp213;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -385,22 +387,36 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T remove(final T key) {
 
 	// your code here
-    	SingleNode<T> curr = front;
-    	SingleNode<T> prev = front;
-    	
-    	while (curr != null) {
-    		
-    		if(curr.getDatum().equals(key)) {
-    			break;
-    		}
-    		prev = curr;
-    		curr = curr.getNext();
-    	}
-    	T ret = curr.getDatum();
-    	
-    	prev.setNext(curr.getNext());
-    	
-	return ret;
+        if (front == null) {        // empty list
+            return null;
+        }
+
+        // If the key is at the front
+        if (front.getDatum().equals(key)) {
+            T value = front.getDatum();
+            front = front.getNext();
+            length--;
+            return value;
+        }
+
+        // Otherwise, search through the list
+        SingleNode<T> prev = front;
+        SingleNode<T> curr = front.getNext();
+
+        while (curr != null && !curr.getDatum().equals(key)) {
+            prev = curr;
+            curr = curr.getNext();
+        }
+
+        if (curr != null) {
+            // Found a match, remove it
+            T value = curr.getDatum();
+            prev.setNext(curr.getNext());
+            length--;
+            return value;
+        }
+
+        return null;  // key not found
     }
 
     /**
@@ -413,6 +429,7 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 	// your code here
     	T ret = front.getDatum();
     	front = front.getNext();
+    	length--;
 
 	return ret;
     }
@@ -425,6 +442,16 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void removeMany(final T key) {
 
 	// your code here
+    	SingleNode<T> curr = front;
+    	
+    	while(curr != null) {
+    		
+    		if(curr.getDatum().equals(key)) {
+    			remove(key);
+    		}
+    		
+    		curr = curr.getNext();
+    	}
 
 	return;
     }
@@ -435,7 +462,12 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void reverse() {
 
 	// your code here
-
+    	SingleNode<T> curr = front;
+    	
+    	while (curr != null) {
+    		prepend(curr.getDatum());
+    	}
+    	
 	return;
     }
 
@@ -454,7 +486,46 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void split(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+    	 if (front == null) {
+    	        return; // nothing to split
+    	    }
 
+    	    // Determine total number of nodes
+    	    int mid = (length + 1) / 2; // left gets the extra if odd
+    	    int index = 0;
+
+    	    SingleNode<T> curr = this.front;
+    	    SingleNode<T> next;
+
+    	    // Move first half to left
+    	    while (index < mid && curr != null) {
+    	        next = curr.getNext();
+    	        curr.setNext(left.front);   // attach to front of left
+    	        left.front = curr;
+    	        left.length++;
+    	        index++;
+    	        curr = next;
+    	    }
+
+    	    // Reverse left to preserve original order (since we prepended)
+    	    left.reverse();
+    	    
+    	    // Move remaining nodes to right
+    	    while (curr != null) {
+    	        next = curr.getNext();
+    	        curr.setNext(right.front);
+    	        right.front = curr;
+    	        right.length++;
+    	        curr = next;
+    	    }
+
+    	    // Reverse right to preserve original order
+    	    right.reverse();
+    	    
+    	    // Empty the current list
+    	    front = null;
+    	    length = 0;
+    	
 	return;
     }
 
@@ -473,8 +544,11 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void splitAlternate(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+    	
+    	while(true) {
+    		System.out.println("shit");
+    	}
 
-	return;
     }
 
     /**
@@ -492,6 +566,10 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void union(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+    	
+    	while(true) {
+    		System.out.println("shit");
+    	}
 
 	return;
     }
