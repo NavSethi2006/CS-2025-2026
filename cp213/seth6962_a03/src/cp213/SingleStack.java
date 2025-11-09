@@ -27,7 +27,35 @@ public class SingleStack<T> extends SingleLink<T> {
     public void combine(final SingleStack<T> left, final SingleStack<T> right) {
 
 	// your code here
+        boolean fromLeft = true;
 
+        // While either left or right still has nodes
+        while (left.front != null || right.front != null) {
+            SingleNode<T> node = null;
+
+            // Alternate between left and right
+            if (fromLeft && left.front != null) {
+                node = left.front;
+                left.front = left.front.getNext();
+                left.length--;
+            } else if (!fromLeft && right.front != null) {
+                node = right.front;
+                right.front = right.front.getNext();
+                right.length--;
+            }
+
+            if (node != null) {
+                node.setNext(front);
+                front = node;
+                length++;
+            }
+
+            fromLeft = !fromLeft;
+        }
+
+        // Empty the source stacks
+        left.front = null;
+        right.front = null;
 	return;
     }
 
@@ -41,8 +69,15 @@ public class SingleStack<T> extends SingleLink<T> {
     public T pop() {
 
 	// your code here
+        if (front == null) {
+            return null;
+        }
 
-	return null;
+        T value = front.getDatum();
+        front = front.getNext();
+        length--;
+        return value;
+
     }
 
     /**
@@ -53,6 +88,9 @@ public class SingleStack<T> extends SingleLink<T> {
     public void push(final T datum) {
 
 	// your code here
+    	SingleNode<T> node = new SingleNode<>(datum, front);
+        front = node;
+        length++;
 
 	return;
     }
@@ -72,7 +110,27 @@ public class SingleStack<T> extends SingleLink<T> {
     public void splitAlternate(final SingleStack<T> left, final SingleStack<T> right) {
 
 	// your code here
+        boolean toLeft = true;
 
+        while (front != null) {
+            // Remove the top node from this stack
+            SingleNode<T> node = front;
+            front = front.getNext();
+            length--;
+
+            // Add node to destination stack (move node only)
+            if (toLeft) {
+                node.setNext(left.front);
+                left.front = node;
+                left.length++;
+            } else {
+                node.setNext(right.front);
+                right.front = node;
+                right.length++;
+            }
+
+            toLeft = !toLeft;
+        }
 	return;
     }
 }

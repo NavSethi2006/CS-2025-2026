@@ -208,8 +208,16 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     	SingleNode<T> curr = source.front;
     	SingleNode<T> curr2 = front;
     	
-    	if(!curr.getDatum().equals(curr2.getDatum())) {
+    	if(source.length != length) {
     		return false;
+    	}
+    	
+    	while(curr != null) {
+	    	if(!curr.getDatum().equals(curr2.getDatum())) 
+	    		return false;
+	    	
+	    	curr = curr.getNext();
+	    	curr2 = curr2.getNext();
     	}
     	
 	return true;
@@ -279,29 +287,21 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 
 	// your code here
     	
-		SingleNode<T> curr = left.front;
-		SingleNode<T> curr2 = right.front;
-    	
-    	if(left.length >= right.length) {
-    		while(curr != null) {
-    			this.append(curr.getDatum());
-    			curr = curr.getNext();
-    			length++;
-    			this.append(curr2.getDatum());
-    			curr2 = curr2.getNext();
-    			length++;
-    		}
-    	}
-    	else {
-    		while(curr2 != null) {
-    			this.append(curr.getDatum());
-    			curr = curr.getNext();
-    			length++;
-    			this.append(curr2.getDatum());
-    			curr2 = curr2.getNext();
-    			length++;
-    		}
-    	}	
+        this.front = null;
+        this.length = 0;
+
+        if (left.front == null || right.front == null) {
+            return; // no intersection possible
+        }
+
+        SingleNode<T> currentLeft = left.front;
+        while (currentLeft != null) {
+            if (right.contains(currentLeft.getDatum()) && !this.contains(currentLeft.getDatum())) {
+                // Copy data (not nodes)
+                this.append(currentLeft.getDatum());
+            }
+            currentLeft = currentLeft.getNext();
+        }
 	return;
     }
 
@@ -462,11 +462,14 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void reverse() {
 
 	// your code here
-    	SingleNode<T> curr = front;
+    	SingleList<T> list = new SingleList<T>();
     	
-    	while (curr != null) {
-    		prepend(curr.getDatum());
+    	while (front != null) {
+    		list.prepend(front.getDatum());
+    		front = front.getNext();
     	}
+    	
+    	append(list);
     	
 	return;
     }
@@ -544,10 +547,33 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void splitAlternate(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+    	SingleNode<T> curr = front;
+    	SingleNode<T> next;
+    	int index = 0;
     	
-    	while(true) {
-    		System.out.println("shit");
+    	while(curr != null) {
+    		if(index % 2 == 0) {
+	    		next = curr.getNext();
+		        curr.setNext(left.front);   // attach to front of left
+		        left.front = curr;
+		        left.length++;
+    		} else {
+		        next = curr.getNext();
+		        curr.setNext(right.front);
+		        right.front = curr;
+		        right.length++;
+    		}
+    	
+	        index++;
+	        curr = next;
     	}
+    	
+    	
+    	left.reverse();
+    	right.reverse();
+    	
+    	front = null;
+    	length = 0;
 
     }
 
@@ -566,11 +592,16 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void union(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+    	SingleNode<T> curr = left.front;
+    	SingleNode<T> curr2 = right.front;
     	
-    	while(true) {
-    		System.out.println("shit");
+    	while(curr != null) {
+    		this.append(curr.getDatum());
+    		curr = curr.getNext();
     	}
-
-	return;
+    	while(curr2 != null) {
+    		this.append(curr2.getDatum());
+    		curr2 = curr2.getNext();
+    	}
     }
 }

@@ -31,6 +31,54 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
 
 	// your code here
 
+    SingleNode<T> nodeL = left.front;
+    SingleNode<T> nodeR = right.front;
+    SingleNode<T> tail = null; // tail of the combined list
+
+    // Merge nodes from left and right in sorted order
+    while (nodeL != null && nodeR != null) {
+    	SingleNode<T> nextNode;
+
+        // Choose the smaller node (based on priority, using compareTo)
+        if (nodeL.getDatum().compareTo(nodeR.getDatum()) <= 0) {
+            nextNode = nodeL;
+            nodeL = nodeL.getNext();
+        } else {
+            nextNode = nodeR;
+            nodeR = nodeR.getNext();
+        }
+
+        // Detach the node and link it to the combined list
+        nextNode.setNext(null);
+        if (this.front == null) {
+            this.front = nextNode;
+        } else {
+            tail.setNext(nextNode);
+        }
+        tail = nextNode;
+    }
+
+    // Attach remaining nodes (only one list can still have nodes)
+    SingleNode<T> remaining = (nodeL != null) ? nodeL : nodeR;
+    while (remaining != null) {
+    	SingleNode<T> next = remaining.getNext();
+        remaining.setNext(null);
+        if (this.front == null) {
+            this.front = remaining;
+        } else {
+            tail.setNext(remaining);
+        }
+        tail = remaining;
+        remaining = next;
+    }
+
+    // Update rear pointer
+    this.rear = tail;
+
+    // Empty the source queues
+    left.front = left.rear = null;
+    right.front = right.rear = null;
+
 	return;
     }
 
@@ -49,6 +97,29 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
     public void insert(final T datum) {
 
 	// your code here
+    	SingleNode<T> node = front;
+    	SingleNode<T> prev = null;
+    	
+    	while(node != null && datum.compareTo(node.getDatum()) >= 0) {
+	    	prev = node;
+	    	node = node.getNext();
+    	}
+    	
+    	SingleNode<T> newNode = new SingleNode<T>(datum, node);
+    	
+    	if(front == null) {
+    		front = newNode;
+    	}else if (prev == null) {
+    		newNode.setNext(front);
+    		front = newNode;
+    		
+    	}
+    	else {
+        	prev.setNext(newNode);
+    	}
+    	
+    	length++;
+    	
 
 	return;
     }
@@ -63,8 +134,11 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
     public T remove() {
 
 	// your code here
-
-	return null;
+    	T nodedata = front.getDatum();
+    	front = front.getNext();
+    	length--;
+    	
+	return nodedata;
     }
 
     /**
@@ -84,8 +158,45 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
      */
     public void splitByKey(final T key, final SinglePriorityQueue<T> higher, final SinglePriorityQueue<T> lower) {
 
-	// your code here
+        while (this.front != null) {
+            // Detach the front node
+            SingleNode<T> node = front;
+            front = front.getNext();
+            node.setNext(null);
 
-	return;
+            // If this becomes empty, clear rear
+            if (front == null) {
+                rear = null;
+            }
+
+            // Choose destination based on key
+            SinglePriorityQueue<T> dest = (node.getDatum().compareTo(key) > 0) ? higher : lower;
+
+            // Insert node into dest keeping dest sorted in DESCENDING order:
+            // dest.front -> highest (largest) value
+            if (dest.front == null) {
+                // empty destination
+                dest.front = dest.rear = node;
+            } else {
+                // if node is larger than current front, it becomes new front
+                if (dest.front.getDatum().compareTo(node.getDatum()) < 0) {
+                    node.setNext(dest.front);
+                    dest.front = node;
+                } else {
+                    // find insertion point: prev such that prev.next.value < node.value
+                    SingleNode<T> prev = dest.front;
+                    while (prev.getNext() != null && prev.getDatum().compareTo(node.getDatum()) >= 0) {
+                        prev = prev.getNext();
+                    }
+                    // insert after prev
+                    node.setNext(prev.getNext());
+                    prev.setNext(node);
+                    // update rear if inserted at end
+                    if (node.getNext() == null) {
+                        dest.rear = node;
+                    }
+                }
+            }
+        }
     }
 }

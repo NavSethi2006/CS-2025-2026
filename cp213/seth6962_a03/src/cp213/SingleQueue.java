@@ -26,8 +26,19 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void combine(final SingleQueue<T> left, final SingleQueue<T> right) {
 
 	// your code here
+    	
+    	  while (!left.isEmpty() || !right.isEmpty()) {
+    	        if (!left.isEmpty()) {
+    	            // Move one node from left to this
+    	            this.insert(left.remove());
+    	        }
+    	        if (!right.isEmpty()) {
+    	            // Move one node from right to this
+    	            this.insert(right.remove());
+    	        }
+    	  }
+    	length = left.length + right.length;
 
-	return;
     }
 
     /**
@@ -38,6 +49,18 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void insert(final T datum) {
 
 	// your code here
+    	
+    	SingleNode<T> new_node = new SingleNode<T>(datum, null);
+    	
+    	if(rear == null) {
+    		front = new_node;
+    		rear = new_node;
+    	} else {
+    		rear.setNext(new_node);
+    		rear = new_node;
+    	}
+    	
+    	length++;
 
 	return;
     }
@@ -52,8 +75,12 @@ public class SingleQueue<T> extends SingleLink<T> {
     public T remove() {
 
 	// your code here
+    	T retdata = front.getDatum();
+    		
+    	front = front.getNext();	
+    	length--;
 
-	return null;
+	return retdata;
     }
 
     /**
@@ -71,7 +98,40 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void splitAlternate(final SingleQueue<T> left, final SingleQueue<T> right) {
 
 	// your code here
+    	   boolean moveToLeft = true;
 
+    	    // Process until this queue is empty
+    	    while (this.front != null) {
+    	        // Take the first node from this queue
+    	        SingleNode<T> node = front;
+    	        front = front.getNext(); // Move the front pointer forward
+    	        node.setNext(null);             // Detach the node completely
+
+    	        // If this queue becomes empty, update rear
+    	        if (this.front == null) {
+    	            this.rear = null;
+    	        }
+
+    	        // Move node to left or right alternately
+    	        if (moveToLeft) {
+    	            if (left.front == null) {
+    	                left.front = node;
+    	            } else {
+    	                left.rear.setNext(node);
+    	            }
+    	            left.rear = node;
+    	        } else {
+    	            if (right.front == null) {
+    	                right.front = node;
+    	            } else {
+    	                right.rear.setNext(node);
+    	            }
+    	            right.rear = node;
+    	        }
+
+    	        // Alternate for next iteration
+    	        moveToLeft = !moveToLeft;
+    	    }
 	return;
     }
 }
