@@ -44,24 +44,33 @@ int balance_factor(AVLNODE *np)
 AVLNODE *rotate_left(AVLNODE *np)
 {
 // your code
+// your implementation
+  AVLNODE *child = np->right;
+	AVLNODE *temp = child->left;
+	// Rearrange the nodes.
+	// < your code here >
+	child->left = np;
+	np->right = temp; 
 
-
+  np->height = max(height(np->left), height(np->right))+1;
+	child->height = max(height(child->left), height(child->right))+1;
+  return child;
 }
 
 AVLNODE *rotate_right(AVLNODE *np)
 {
 // your code
 
-    AVLNODE* x = np->left;
-    AVLNODE* T2 = x->right;
-
-    x->right = np;
-    np->left = T2;
-
-    np->height = 1 + max(height(np->left), height(np->right));
-    x->height = 1 + max(height(x->left), height(x->right));
-
-    return x;
+  AVLNODE *child = np->left;
+	AVLNODE *temp = child->right;
+	// Rearrange the nodes.
+	child->right = np;
+	np->left = temp;
+	
+	np->height = max(height(np->left), height(np->right))+1;
+	child->height = max(height(child->left), height(child->right))+1;
+	// Return new root.
+	return (child);
 }
 
 AVLNODE *extract_smallest_node(AVLNODE **rootp) {
@@ -84,53 +93,47 @@ AVLNODE *extract_smallest_node(AVLNODE **rootp) {
 
 void avl_insert(AVLNODE **rootp, RECORD data)
 {  
+  AVLNODE *np = (AVLNODE *) malloc(sizeof(AVLNODE));
+  if (np == NULL) return;
+  strcpy(np->data.name, data.name);
+  np->data.score = data.score;
+  np->height = 1;
+  np->left = NULL;
+  np->right = NULL;
+  
   // 1. Perform the normal BST insertion
   if (*rootp == NULL) {
-    AVLNODE *np = (AVLNODE *) malloc(sizeof(AVLNODE));
-      if (np) {
-        np->data = data;
-        np->height = 1;
-        np->left = NULL;
-        np->right = NULL;
-      }
-      *rootp = np;
-  } else {
-  
-    AVLNODE *root = *rootp;
-    
-    if (strcmp(data.name, root->data.name) == 0 )
-      return;
-    else if (strcmp(data.name, root->data.name) < 0 ) {
-      avl_insert(&root->left, data);
-    }
-    else {
-      avl_insert(&root->right, data);
-    }
-    
-    // 2. update height of this ancestor node
-    root->height += 1 + max(height(root->left), height(root->right));
-    
-    // 3. Get the balance factor of this ancestor node to check whether this node became unbalanced
-    int balance = balance_factor(root);
-   
-    // 4. rebalance if not balanced
-    if(balance > 1 && data.score < root->left->data.score)
-        return rotate_right(root);
-    
-    if(balance < -1 && data.score > root->right->data.score)
-        return rotate_left(root);
-
-    if(balance > 1 && data.score > root->left->data.score)
-        root->left = rotate_left(root->left);
-        return rotate_right(root);
-
-    if(balance < -1 && data.score > root->right->data.score) {
-        root->right = rotate_right(root->right);
-        return rotate_left(root);
-    }
-
-
+    *rootp = np;
+    return;
   }
+  
+  AVLNODE *root = *rootp;
+  if (strcmp(data.name, root->data.name) < 0 )
+    avl_insert(&root->left, data);
+  else if (strcmp(data.name, root->data.name) > 0 )
+    avl_insert(&root->right, data);
+  else return ;
+
+  // 2. update height of this root node
+  root->height = 1 + max(height(root->left), height(root->right));
+ 
+  // 3. Get the balance factor of this ancestor node to check whether this node became unbalanced
+  int bf = balance_factor(root);
+  
+  // 4. re-balance if not balanced
+  if(bf > 1){
+    if(balance_factor(root->left) >= 0) *rootp = rotate_right(root);
+    else{
+      root->left = rotate_left(root->left);
+      *rootp = rotate_right(root);
+    }
+  } else if(bf < -1){
+    if(balance_factor(root->right) <= 0) *rootp = rotate_left(root);
+    else {
+      root->right = rotate_right(root->right);
+      *rootp = rotate_left(root);
+    }
+  } 
 }
 
 void avl_delete(AVLNODE **rootp, char *name)
@@ -171,18 +174,43 @@ void avl_delete(AVLNODE **rootp, char *name)
   root = *rootp;
     
   // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE
-  root->height = ???
+  root->height = 1+max(height(root->left), height(root->right));
 
   // STEP 3: GET THE BALANCE FACTOR OF THIS NODE 
-  int balance = ???
+  int bf = balance_factor(root);
 
   // STEP 4: rebalance if not balanced
-  ???
+  if(bf > 1){
+    if(balance_factor(root->left) >= 0) *rootp = rotate_right(root);
+    else{
+      root->left = rotate_left(root->left);
+      *rootp = rotate_right(root);
+    }
+  } else if(bf < -1){
+    if(balance_factor(root->right) <= 0) *rootp = rotate_left(root);
+    else {
+      root->right = rotate_right(root->right);
+      *rootp = rotate_left(root);
+    }
+  } 
+  
 
 }
 
 AVLNODE *avl_search(AVLNODE *root, char *name) {
 // your code
+  if(root == NULL) {
+    return NULL;
+  }
+  if(strcmp(root->data.name, name) == 0) {
+    return root;
+  }
+  AVLNODE *node = avl_search(root->left, name);
+  if(node) {
+    return node;
+  }
+
+  return avl_search(root->right, name);
 }
 
 

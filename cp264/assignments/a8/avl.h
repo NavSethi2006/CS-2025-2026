@@ -1,3 +1,5 @@
+#ifndef AVL_H
+#define AVL_H
 
 typedef struct record {
     char name[20];
@@ -62,3 +64,5 @@ typedef struct record {
    * @return - the pointer to the replaced node.
    */
   AVLNODE *rotate_right(AVLNODE *np);
+
+  #endif
