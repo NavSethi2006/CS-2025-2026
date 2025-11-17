@@ -59,7 +59,13 @@ public class ExceptionsTest {
 	
 		try {
 			System.out.print("Enter an integer ('Quit' to stop): ");
-			total += keyboard.nextInt();
+			if (keyboard.hasNextInt()) {
+				total += keyboard.nextInt();
+			} else {
+				String s = keyboard.next();
+				if (s.equalsIgnoreCase("Quit")) 
+                    break;
+			}
 			
 		}catch(InputMismatchException e) {
 			if(e.toString().contains("Quit")) {
@@ -67,7 +73,7 @@ public class ExceptionsTest {
 			}
 			System.out.println("Thats not an integer!");
 			
-			System.out.println(e.getLocalizedMessage());
+			System.out.println(e.toString());
 			keyboard.next();
 		}
 	}
@@ -87,6 +93,15 @@ public class ExceptionsTest {
 	String result = "";
 
 	// your code here
+	
+	if (n < 0) {
+        throw new IllegalArgumentException("Please Enter a Positive Number!");
+    }
+	
+	for(int i = 0; i < n; i++) {
+		result += str;
+	}
+
 
 	return result;
     }
