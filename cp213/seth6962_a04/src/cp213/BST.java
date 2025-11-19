@@ -37,8 +37,21 @@ public class BST<T extends Comparable<T>> {
     protected boolean equalsAux(final TreeNode<T> source, final TreeNode<T> target) {
 
 	// your code here
+    	
+        if (source == null && target == null) {
+            return true;
+        }
+        if (source == null || target == null) {
+            return false;
+        }
 
-	return false;
+        boolean sameData = source.getCountedItem().compareTo(target.getCountedItem()) == 0;
+        boolean sameCount = source.getCountedItem().getCount() == target.getCountedItem().getCount();
+        boolean sameHeight = source.getHeight() == target.getHeight();
+
+        return sameData && sameCount && sameHeight
+                && equalsAux(source.getLeft(), target.getLeft())
+                && equalsAux(source.getRight(), target.getRight());
     }
 
     /**
@@ -86,8 +99,27 @@ public class BST<T extends Comparable<T>> {
     protected boolean isValidAux(final TreeNode<T> node, TreeNode<T> minNode, TreeNode<T> maxNode) {
 
 	// your code here
+        if (node == null) {
+            return true;
+        }
 
-	return false;
+        // BST ordering constraints
+        if (minNode != null && node.getCountedItem().compareTo(minNode.getCountedItem()) <= 0) {
+            return false;
+        }
+        if (maxNode != null && node.getCountedItem().compareTo(maxNode.getCountedItem()) >= 0) {
+            return false;
+        }
+
+        // Height check
+        int expected = Math.max(nodeHeight(node.getLeft()), nodeHeight(node.getRight())) + 1;
+        if (node.getHeight() != expected) {
+            return false;
+        }
+
+        return isValidAux(node.getLeft(), minNode, node)
+            && isValidAux(node.getRight(), node, maxNode);
+        
     }
 
     /**
@@ -109,9 +141,67 @@ public class BST<T extends Comparable<T>> {
      */
     protected TreeNode<T> removeAux(TreeNode<T> node, final CountedItem<T> countedItem) {
 
-	// your code here
 
-	return null;
+        if (node == null) {
+            return null;
+        }
+
+        int result = node.getCountedItem().compareTo(countedItem);
+
+        if (result > 0) {
+            node.setLeft(removeAux(node.getLeft(), countedItem));
+        }
+        else if (result < 0) {
+            node.setRight(removeAux(node.getRight(), countedItem));
+        }
+        else {
+            // FOUND NODE
+            if (node.getCountedItem().getCount() > 1) {
+                node.getCountedItem().decrementCount();
+                return node;
+            }
+
+            // REMOVE NODE COMPLETELY
+
+            // Case 1: No children
+            if (node.getLeft() == null && node.getRight() == null) {
+                this.size--;
+                return null;
+            }
+
+            // Case 2: One child
+            if (node.getLeft() == null) {
+                this.size--;
+                return node.getRight();
+            }
+            if (node.getRight() == null) {
+                this.size--;
+                return node.getLeft();
+            }
+
+            // Case 3: Two children
+            // Return the inorder successor to replace this node
+
+            TreeNode<T> succ = node.getRight();
+
+            while (succ.getLeft() != null) {
+                succ = succ.getLeft();
+            }
+
+            // Remove successor from right subtree
+            node.setRight(removeAux(node.getRight(), succ.getCountedItem()));
+
+            // Keep successor node as replacement
+            succ.setLeft(node.getLeft());
+            succ.setRight(node.getRight());
+
+            this.size--; // we've removed exactly one node
+
+            node = succ; // return successor as the replacement node
+        }
+
+        node.updateHeight();
+        return node;
     }
 
     /**
@@ -123,8 +213,7 @@ public class BST<T extends Comparable<T>> {
     public boolean contains(final CountedItem<T> key) {
 
 	// your code here
-
-	return false;
+    	return retrieve(key) != null;
     }
 
     /**
@@ -201,8 +290,8 @@ public class BST<T extends Comparable<T>> {
     public boolean isEmpty() {
 
 	// your code here
+       return this.size == 0;
 
-	return false;
     }
 
     /**
@@ -273,7 +362,25 @@ public class BST<T extends Comparable<T>> {
     public CountedItem<T> retrieve(final CountedItem<T> key) {
 
 	// your code here
+    	
+        TreeNode<T> current = this.root;
 
-	return null;
+        while (current != null) {
+            this.comparisons++;
+
+            int result = key.compareTo(current.getCountedItem());
+
+            if (result == 0) {
+                return current.getCountedItem().copy();
+            } 
+            else if (result < 0) {
+                current = current.getLeft();
+            } 
+            else {
+                current = current.getRight();
+            }
+        }
+
+        return null;
     }
 }

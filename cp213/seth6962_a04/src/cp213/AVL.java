@@ -21,8 +21,10 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     private int balance(final TreeNode<T> node) {
 
 	// your code here
-
-	return 0;
+        if (node == null) {
+            return 0;
+        }
+        return this.nodeHeight(node.getLeft()) - this.nodeHeight(node.getRight());
     }
 
     /**
@@ -34,8 +36,24 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rebalance(TreeNode<T> node) {
 
 	// your code here
+    	  node.updateHeight();
+          int bf = balance(node);
 
-	return null;
+          if (bf > 1) {
+              if (balance(node.getLeft()) < 0) {
+                  node.setLeft(rotateLeft(node.getLeft()));
+              }
+              return rotateRight(node);
+          }
+
+          if (bf < -1) {
+              if (balance(node.getRight()) > 0) {
+                  node.setRight(rotateRight(node.getRight()));
+              }
+              return rotateLeft(node);
+          }
+
+          return node;
     }
 
     /**
@@ -47,8 +65,14 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateLeft(final TreeNode<T> node) {
 
 	// your code here
+    	TreeNode<T> newRoot = node.getRight();
+        node.setRight(newRoot.getLeft());
+        newRoot.setLeft(node);
 
-	return null;
+        node.updateHeight();
+        newRoot.updateHeight();
+
+        return newRoot;
     }
 
     /**
@@ -60,8 +84,15 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateRight(final TreeNode<T> node) {
 
 	// your code here
+        TreeNode<T> newRoot = node.getLeft();
+        node.setLeft(newRoot.getRight());
+        newRoot.setRight(node);
 
-	return null;
+        node.updateHeight();
+        newRoot.updateHeight();
+
+        return newRoot;
+
     }
 
     /**
@@ -76,8 +107,29 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     protected TreeNode<T> insertAux(TreeNode<T> node, final CountedItem<T> countedItem) {
 
 	// your code here
+        if (node == null) {
+            node = new TreeNode<T>(countedItem);
+            node.getCountedItem().incrementCount();
+            this.size++;
+            return node;
+        }
 
-	return null;
+        int cmp = node.getCountedItem().compareTo(countedItem);
+
+        if (cmp > 0) {
+            node.setLeft(insertAux(node.getLeft(), countedItem));
+        }
+        else if (cmp < 0) {
+            node.setRight(insertAux(node.getRight(), countedItem));
+        }
+        else {
+            // duplicate
+            node.getCountedItem().incrementCount();
+            return node;
+        }
+
+        // Rebalance on return
+        return rebalance(node);
     }
 
     /**
@@ -93,8 +145,31 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     protected boolean isValidAux(final TreeNode<T> node, TreeNode<T> minNode, TreeNode<T> maxNode) {
 
 	// your code here
+        if (node == null) {
+            return true;
+        }
 
-	return false;
+        // BST property check
+        if (minNode != null && node.getCountedItem().compareTo(minNode.getCountedItem()) <= 0)
+            return false;
+
+        if (maxNode != null && node.getCountedItem().compareTo(maxNode.getCountedItem()) >= 0)
+            return false;
+
+        // AVL balance property
+        int bf = balance(node);
+        if (bf < -1 || bf > 1)
+            return false;
+
+        // Height validity: node.height = max(left,right) + 1
+        int expectedHeight = Math.max(nodeHeight(node.getLeft()), nodeHeight(node.getRight())) + 1;
+        if (node.getHeight() != expectedHeight)
+            return false;
+
+        // Check subtrees
+        return isValidAux(node.getLeft(), minNode, node)
+                && isValidAux(node.getRight(), node, maxNode);
+
     }
 
     /**
@@ -120,8 +195,61 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     protected TreeNode<T> removeAux(TreeNode<T> node, final CountedItem<T> countedItem) {
 
 	// your code here
+        if (node == null) {
+            return null;
+        }
 
-	return null;
+        int cmp = node.getCountedItem().compareTo(countedItem);
+
+        if (cmp > 0) {
+            node.setLeft(removeAux(node.getLeft(), countedItem));
+        }
+        else if (cmp < 0) {
+            node.setRight(removeAux(node.getRight(), countedItem));
+        }
+        else {
+            // found node
+            if (node.getCountedItem().getCount() > 1) {
+                node.getCountedItem().decrementCount();
+                return node;
+            }
+
+            // leaf
+            if (node.getLeft() == null && node.getRight() == null) {
+                this.size--;
+                return null;
+            }
+            // one child
+            else if (node.getLeft() == null) {
+                this.size--;
+                return node.getRight();
+            }
+            else if (node.getRight() == null) {
+                this.size--;
+                return node.getLeft();
+            }
+            else {
+                // two children → replace node with successor node
+                TreeNode<T> succ = node.getRight();
+                while (succ.getLeft() != null) {
+                    succ = succ.getLeft();
+                }
+
+                // Remove successor from its old location
+                node.setRight(removeAux(node.getRight(), succ.getCountedItem()));
+
+                // Attach children to successor
+                succ.setLeft(node.getLeft());
+                succ.setRight(node.getRight());
+
+                node = succ;
+
+                this.size--;
+            }
+        }
+
+        // Rebalance on way up
+        return rebalance(node);
     }
 
 }

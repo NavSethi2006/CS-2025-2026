@@ -22,8 +22,39 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> retrieveAux(TreeNode<T> node, final CountedItem<T> key) {
 
 	// your code here
+        if (node == null) {
+            return null;
+        }
 
-	return null;
+        int cmp = node.getCountedItem().compareTo(key);
+        this.comparisons++;
+
+        if (cmp < 0) {
+            node.setLeft(retrieveAux(node.getLeft(), key));
+
+            if (node.getLeft() != null &&
+                node.getLeft().getCountedItem().getCount() >
+                node.getCountedItem().getCount()) {
+
+                node = rotateRight(node);
+            }
+        }
+        else if (cmp > 0) {
+            node.setRight(retrieveAux(node.getRight(), key));
+
+            if (node.getRight() != null &&
+                node.getRight().getCountedItem().getCount() >
+                node.getCountedItem().getCount()) {
+
+                node = rotateLeft(node);
+            }
+        }
+        else {
+            node.getCountedItem().incrementCount();
+        }
+
+        return node;
+
     }
 
     /**
@@ -35,8 +66,17 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateLeft(final TreeNode<T> parent) {
 
 	// your code here
+    	
+        TreeNode<T> newRoot = parent.getRight();
+        parent.setRight(newRoot.getLeft());
+        newRoot.setLeft(parent);
 
-	return null;
+        // heights must be updated
+        parent.updateHeight();
+        newRoot.updateHeight();
+
+        return newRoot;
+
     }
 
     /**
@@ -48,8 +88,14 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateRight(final TreeNode<T> parent) {
 
 	// your code here
+        TreeNode<T> newRoot = parent.getLeft();
+        parent.setLeft(newRoot.getRight());
+        newRoot.setRight(parent);
 
-	return null;
+        parent.updateHeight();
+        newRoot.updateHeight();
+
+        return newRoot;
     }
 
     /**
@@ -60,8 +106,24 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     protected TreeNode<T> insertAux(TreeNode<T> node, final CountedItem<T> countedItem) {
 
 	// your code here
+        if (node == null) {
+        	this.size++;
+            return new TreeNode<>(countedItem);
+        }
 
-	return null;
+        int cmp = node.getCountedItem().compareTo(countedItem);
+
+        if (cmp < 0) {
+            node.setLeft(insertAux(node.getLeft(), countedItem));
+        }
+        else if (cmp > 0) {
+            node.setRight(insertAux(node.getRight(), countedItem));
+        }
+
+
+        node.updateHeight();
+        return node;
+
     }
 
     /**
@@ -77,8 +139,38 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     protected boolean isValidAux(final TreeNode<T> node, TreeNode<T> minNode, TreeNode<T> maxNode) {
 
 	// your code here
+        if (node == null) {
+            return true;
+        }
 
-	return false;
+        CountedItem<T> data = node.getCountedItem();
+
+        // Standard BST ordering
+        if (minNode != null &&
+            data.compareTo(minNode.getCountedItem()) <= 0) {
+            return false;
+        }
+
+        if (maxNode != null &&
+            data.compareTo(maxNode.getCountedItem()) >= 0) {
+            return false;
+        }
+
+        // Popularity rule
+        if (node.getLeft() != null &&
+            node.getLeft().getCountedItem().getCount() >
+            data.getCount()) {
+            return false;
+        }
+
+        if (node.getRight() != null &&
+            node.getRight().getCountedItem().getCount() >
+            data.getCount()) {
+            return false;
+        }
+
+        return isValidAux(node.getLeft(), minNode, node)
+            && isValidAux(node.getRight(), node, maxNode);
     }
 
     /**
@@ -102,8 +194,11 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     public CountedItem<T> retrieve(CountedItem<T> key) {
 
 	// your code here
+        this.root = retrieveAux(this.root, key);
 
-	return null;
+        // If key was not found, count stays 0 and we don't modify the tree
+        return key;
+
     }
 
 }
