@@ -71,10 +71,6 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
         parent.setRight(newRoot.getLeft());
         newRoot.setLeft(parent);
 
-        // heights must be updated
-        parent.updateHeight();
-        newRoot.updateHeight();
-
         return newRoot;
 
     }
@@ -91,9 +87,6 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
         TreeNode<T> newRoot = parent.getLeft();
         parent.setLeft(newRoot.getRight());
         newRoot.setRight(parent);
-
-        parent.updateHeight();
-        newRoot.updateHeight();
 
         return newRoot;
     }
@@ -112,7 +105,8 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
         }
 
         int cmp = node.getCountedItem().compareTo(countedItem);
-
+        
+        
         if (cmp < 0) {
             node.setLeft(insertAux(node.getLeft(), countedItem));
         }
@@ -195,10 +189,23 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
         this.root = retrieveAux(this.root, key);
+        fixheights(this.root);
 
         // If key was not found, count stays 0 and we don't modify the tree
         return key;
 
+    }
+    
+    private void fixheights(TreeNode<T> root) {
+        if (root == null) {
+            return;
+        }
+
+        fixheights(root.getLeft());
+        fixheights(root.getRight());
+        root.updateHeight();
+
+        return;
     }
 
 }
