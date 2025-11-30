@@ -23,6 +23,7 @@ void insert_edge_end(EDGELIST *g, int from, int to, int weight) {
     node->weight = weight;
     node->next = NULL;
 
+    
     if(g->end != NULL) { 
         g->end->next = node;
         g->end = node;
